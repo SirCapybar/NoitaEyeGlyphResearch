@@ -88,5 +88,22 @@ namespace NoitaEyeGlyphResearchLib {
             }
             return result;
         }
+
+        public TrigramCollection Cypher(TrigramCollection key, bool decode) {
+            TrigramCollection result = new TrigramCollection(new Trigram[Trigrams.Length]);
+            int keyIndex = 0;
+            for (int i = 0; i < result.Trigrams.Length; ++i) {
+                if (decode) {
+                    result.Trigrams[i] = Trigrams[i] - key.Trigrams[keyIndex];
+                } else { // encode
+                    result.Trigrams[i] = Trigrams[i] + key.Trigrams[keyIndex];
+                }
+
+                if (++keyIndex == key.Trigrams.Length) {
+                    keyIndex = 0;
+                }
+            }
+            return result;
+        }
     }
 }

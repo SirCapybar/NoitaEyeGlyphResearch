@@ -117,6 +117,14 @@ namespace NoitaEyeGlyphResearchLib {
             return trigram + -value;
         }
 
+        public static Trigram operator +(Trigram left, Trigram right) {
+            return left + right.GetBase10();
+        }
+
+        public static Trigram operator -(Trigram left, Trigram right) {
+            return left - right.GetBase10();
+        }
+
         public static bool operator ==(Trigram left, Trigram right) {
             return (ReferenceEquals(left, null) && ReferenceEquals(right, null)) || !ReferenceEquals(left, null) && !ReferenceEquals(right, null) && left.Equals(right);
         }
