@@ -8,18 +8,9 @@ using NoitaEyeGlyphResearchLib;
 
 namespace NoitaEyeGlyphResearch {
     class Program {
-        static void Main(string[] args) {
-            string filepath;
-            if (args.Length == 0) {
-                //Console.Write("No file provided. Enter file path: ");
-                //filepath = Console.ReadLine();
-                filepath = "data.csv";
-            } else {
-                filepath = string.Join(" ", args);
-            }
-
+        private static void Main() {
             try {
-                string[] lines = File.ReadAllLines(filepath);
+                string[] lines = File.ReadAllLines("data.csv");
                 TrigramLineCollection tlc = new TrigramLineCollection(new TrigramCollection[lines.Length - 1]);
                 for (int i = 1; i < lines.Length; ++i) {
                     tlc.TrigramLines[i - 1] = lines[i].ExtractTrigrams();
