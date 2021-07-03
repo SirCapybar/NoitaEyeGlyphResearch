@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace NoitaEyeGlyphResearchLib {
     public class TrigramCollection {
@@ -133,6 +134,32 @@ namespace NoitaEyeGlyphResearchLib {
 
         public byte[] ToByteArray(int offset) {
             return Trigrams.Select(t => (byte)((t.GetBase10() + offset) % 256)).ToArray();
+        }
+
+        public int GetSum() {
+            return Trigrams.Aggregate(0, (sum, t) => sum + t.GetSum());
+        }
+
+        public int GetSum(byte[] mappings) {
+            return Trigrams.Aggregate(0, (sum, t) => sum + t.GetSum(mappings));
+        }
+
+        public string ToBinaryString(bool invert) {
+            StringBuilder builder = new StringBuilder();
+            foreach (Trigram t in Trigrams) {
+                builder.Append(t.ToBinaryString(invert));
+                invert = !invert;
+            }
+            return builder.ToString();
+        }
+
+        public string ToBinaryString(bool invert, byte[] mappings) {
+            StringBuilder builder = new StringBuilder();
+            foreach (Trigram t in Trigrams) {
+                builder.Append(t.ToBinaryString(invert, mappings));
+                invert = !invert;
+            }
+            return builder.ToString();
         }
     }
 }

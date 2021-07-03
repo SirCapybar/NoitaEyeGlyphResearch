@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Text;
 
 namespace NoitaEyeGlyphResearchLib {
     public class Trigram : IComparable<Trigram> {
@@ -211,6 +212,42 @@ namespace NoitaEyeGlyphResearchLib {
                     break;
             }
             return result;
+        }
+
+        public byte GetSum() {
+            return (byte)(A + B + C);
+        }
+
+        public byte GetSum(byte[] mappings) {
+            return (byte)(mappings[A] + mappings[B] + mappings[C]);
+        }
+
+        public string ToBinaryString(bool invert) {
+            StringBuilder builder = new StringBuilder();
+            for (byte i = 0; i < A; ++i) {
+                builder.Append(invert ? '1' : '0');
+            }
+            for (byte i = 0; i < B; ++i) {
+                builder.Append(invert ? '0' : '1');
+            }
+            for (byte i = 0; i < C; ++i) {
+                builder.Append(invert ? '1' : '0');
+            }
+            return builder.ToString();
+        }
+
+        public string ToBinaryString(bool invert, byte[] mappings) {
+            StringBuilder builder = new StringBuilder();
+            for (byte i = 0; i < mappings[A]; ++i) {
+                builder.Append(invert ? '1' : '0');
+            }
+            for (byte i = 0; i < mappings[B]; ++i) {
+                builder.Append(invert ? '0' : '1');
+            }
+            for (byte i = 0; i < mappings[C]; ++i) {
+                builder.Append(invert ? '1' : '0');
+            }
+            return builder.ToString();
         }
     }
 }

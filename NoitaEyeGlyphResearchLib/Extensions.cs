@@ -90,6 +90,17 @@ namespace NoitaEyeGlyphResearchLib {
             return new TrigramCollection(bytes.Select(b => new Trigram(offset + b)).ToArray());
         }
 
+        public static byte[] BinaryStringToByteArray(string binString) {
+            if (binString.Length % 8 != 0) {
+                throw new ArgumentException(nameof(binString));
+            }
+            byte[] result = new byte[binString.Length / 8];
+            for (int i = 0; i < result.Length; ++i) {
+                result[i] = Convert.ToByte(binString.Substring(8 * i, 8), 2);
+            }
+            return result;
+        }
+
         // reference: https://stackoverflow.com/questions/15150147/all-permutations-of-a-list
         public static IEnumerable<IEnumerable<T>> Permute<T>(this IEnumerable<T> sequence) {
             if (sequence == null) {

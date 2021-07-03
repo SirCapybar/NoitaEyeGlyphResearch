@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -66,6 +65,7 @@ namespace NoitaEyeGlyphResearch {
                 File.WriteAllText("msg_ics.csv", perMessageIcsBuilder.ToString());
 
                 const int MIN_ASCII_INCL = 32, MAX_ASCII_EXCL = 127;
+                Encoding encoding = Encoding.BigEndianUnicode;
 
                 //StringBuilder keyOutputBuilder = new StringBuilder();
                 //string[] keys = { "asabovesobelow", "ASABOVESOBELOW", "AsAboveSoBelow" };
@@ -75,7 +75,6 @@ namespace NoitaEyeGlyphResearch {
                 //for (int i = 0; i < dataTrigrams.Length; ++i) {
                 //    alphabet[dataTrigrams[i]] = i;
                 //}
-                //Encoding encoding = Encoding.ASCII;
                 //foreach (ReorderParam oddParam in new[] {
                 //    ReorderParam.ABC,
                 //    ReorderParam.BAC,
@@ -120,7 +119,7 @@ namespace NoitaEyeGlyphResearch {
                 //            //    byte[] decoded = lineBytes.Cypher(keyBytes, true);
 
                 //            //}
-                //            //int min = key.OrderBy(c => c).First();
+                //            //int min = key.Min();
                 //            //int minOffset = -min, maxOffset = minOffset + 124;
                 //            //for (int i = minOffset; i < maxOffset; ++i) {
                 //            //    TrigramCollection tck = key.ToTrigrams(i);
@@ -138,8 +137,57 @@ namespace NoitaEyeGlyphResearch {
                 //        }
                 //    }
                 //}
-
                 //File.WriteAllText("key_output.txt", keyOutputBuilder.ToString());
+
+
+
+                //StringBuilder binaryReworkBuilder = new StringBuilder();
+                //foreach (ReorderParam oddParam in new[] {
+                //    ReorderParam.ABC,
+                //    ReorderParam.BAC,
+                //    ReorderParam.CBA,
+                //    ReorderParam.ACB,
+                //    ReorderParam.BCA,
+                //    ReorderParam.CAB
+                //}) {
+                //    foreach (ReorderParam evenParam in new[] {
+                //        ReorderParam.ABC,
+                //        ReorderParam.BAC,
+                //        ReorderParam.CBA,
+                //        ReorderParam.ACB,
+                //        ReorderParam.BCA,
+                //        ReorderParam.CAB
+                //    }) {
+                //        Console.WriteLine("--------------------");
+                //        foreach (TrigramCollection line in tlc.Reorder(oddParam, evenParam).TrigramLines) {
+                //            List<byte> trSum = line.Trigrams.Select(t => t.GetSum()).ToList();
+                //            Console.WriteLine(string.Join(',', trSum));
+                //            Console.WriteLine(trSum.Max());
+                //            Console.WriteLine(line.GetSum());
+                //            string bin = line.ToBinaryString(false), binInverse = line.ToBinaryString(true);
+                //            int remainder = bin.Length % 8;
+                //            if (remainder != 0) {
+                //                remainder = 8 - remainder;
+                //                bin += new string('0', remainder);
+                //                binInverse += new string('1', remainder);
+                //            }
+
+                //            char[] c = bin.ToCharArray();
+                //            Array.Reverse(c);
+                //            bin = new string(c);
+                //            c = binInverse.ToCharArray();
+                //            Array.Reverse(c);
+                //            binInverse = new string(c);
+
+                //            string reworkedBin = encoding.GetString(Extensions.BinaryStringToByteArray(bin));
+                //            string reworkedBinInverse = encoding.GetString(Extensions.BinaryStringToByteArray(binInverse));
+                //            binaryReworkBuilder.AppendLine(reworkedBin);
+                //            binaryReworkBuilder.AppendLine(reworkedBinInverse);
+                //            Console.WriteLine("______");
+                //        }
+                //    }
+                //}
+                //File.WriteAllText("binary_rework.txt", binaryReworkBuilder.ToString());
             } catch (Exception e) {
                 Console.WriteLine(e);
             }
