@@ -86,6 +86,98 @@ namespace NoitaEyeGlyphResearchLib {
             return result;
         }
 
+        public static string Cypher(this string msg, string alphabet, string key, bool decode) {
+            StringBuilder builder = new StringBuilder();
+            int keyIndex = 0;
+            foreach (char c in msg) {
+                int fromIndex = alphabet.IndexOf(c);
+                int offset = alphabet.IndexOf(key[keyIndex]);
+                int toIndex = decode ? (fromIndex - offset) : (fromIndex + offset);
+                toIndex = (toIndex % alphabet.Length + alphabet.Length) % alphabet.Length;
+                builder.Append(alphabet[toIndex]);
+                if (++keyIndex == key.Length) {
+                    keyIndex = 0;
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static Dictionary<char, uint> GetFrequencyData(this string msg) {
+            Dictionary<char, uint> result = new Dictionary<char, uint>();
+            foreach (char c in msg) {
+                if (result.ContainsKey(c)) {
+                    ++result[c];
+                } else {
+                    result.Add(c, 1U);
+                }
+            }
+            return result;
+        }
+
+        public static float GetIc(this string msg) {
+            Dictionary<char, uint> data = msg.GetFrequencyData();
+            float sum = data.Aggregate(0.0f, (current, pair) => current + pair.Value * (pair.Value - 1U));
+            return sum / (msg.Length * (msg.Length - 1));
+        }
+
+        public static float[] GetIcs(this string msg, uint maxKeySize) {
+            float[] result = new float[maxKeySize];
+            for (uint i = 1; i <= maxKeySize; ++i) {
+                string[] columns = new string[i];
+                for (int j = 0; j < columns.Length; ++j) {
+                    List<char> col = new List<char>();
+                    int ind = j;
+                    while (ind < msg.Length) {
+                        col.Add(msg[ind]);
+                        ind += (int)i;
+                    }
+                    columns[j] = new string(col.ToArray());
+                }
+
+                float ic = columns.Sum(col => col.GetIc());
+                result[i - 1] = ic / i;
+            }
+            return result;
+        }
+
+        public static Dictionary<char, uint> GetFrequencyData(this string msg, string alphabet) {
+            Dictionary<char, uint> result = alphabet.ToDictionary(c => c, c => 0U);
+            foreach (char c in msg) {
+                if (!result.ContainsKey(c)) {
+                    throw new InvalidOperationException($"Character '{c}' is out of the alphabet \"{alphabet}\"!");
+                } else {
+                    ++result[c];
+                }
+            }
+            return result;
+        }
+
+        public static float GetIc(this string msg, string alphabet) {
+            Dictionary<char, uint> data = msg.GetFrequencyData(alphabet);
+            float sum = data.Aggregate(0.0f, (current, pair) => current + pair.Value * (pair.Value - 1U));
+            return sum / (msg.Length * (msg.Length - 1));
+        }
+
+        public static float[] GetIcs(this string msg, uint maxKeySize, string alphabet) {
+            float[] result = new float[maxKeySize];
+            for (uint i = 1; i <= maxKeySize; ++i) {
+                string[] columns = new string[i];
+                for (int j = 0; j < columns.Length; ++j) {
+                    List<char> col = new List<char>();
+                    int ind = j;
+                    while (ind < msg.Length) {
+                        col.Add(msg[ind]);
+                        ind += (int)i;
+                    }
+                    columns[j] = new string(col.ToArray());
+                }
+
+                float ic = columns.Sum(col => col.GetIc(alphabet));
+                result[i - 1] = ic / i;
+            }
+            return result;
+        }
+
         public static TrigramCollection ToTrigrams(this byte[] bytes, int offset) {
             return new TrigramCollection(bytes.Select(b => new Trigram(offset + b)).ToArray());
         }

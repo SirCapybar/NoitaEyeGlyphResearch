@@ -43,7 +43,7 @@ namespace NoitaEyeGlyphResearch {
                         Console.WriteLine();
                         float[][] keyLengthBasedIcs = new float[subTlc.TrigramLines.Length][];
                         for (int i = 0; i < keyLengthBasedIcs.Length; ++i) {
-                            keyLengthBasedIcs[i] = subTlc.TrigramLines[i].GetICs(KEY_COUNT);
+                            keyLengthBasedIcs[i] = subTlc.TrigramLines[i].GetIcs(KEY_COUNT);
                         }
                         float[] avg = new float[KEY_COUNT];
                         for (int i = 0; i < KEY_COUNT; ++i) {
@@ -188,6 +188,19 @@ namespace NoitaEyeGlyphResearch {
                 //    }
                 //}
                 //File.WriteAllText("binary_rework.txt", binaryReworkBuilder.ToString());
+
+                //string alphabet1 = "AITNESLOÄKUMHVRJPYDÖGCBFWZXQÅŠŽ ";
+                //string alphabet2 = "AITNESLOÄKUMHVRJPYDÖGCBFW ";
+                //alphabet1 = new string(alphabet1.OrderBy(c => c).ToArray());
+                //alphabet2 = new string(alphabet2.OrderBy(c => c).ToArray());
+                //string msg =
+                //    "TJIHYSNÄÖRTAJYVANUNATÄSPNATAKNOOAAEEAAOAILHTOHSIOPTIIÖIIIRGPNMOAUIILNELTLLONLENIATAKONNDLIUMGKUSTIH";
+                //string result = msg.Cypher(alphabet2, "AS ABOVE SO BELOW", true);
+                //float[] msgIcs = msg.GetIcs((uint)msg.Length, alphabet1);
+                //msgIcs = msg.GetIcs((uint)msg.Length, alphabet2);
+                //float iiii = msg.GetIc();
+                //iiii = msg.GetIc(alphabet1);
+                //iiii = msg.GetIc(alphabet2);
             } catch (Exception e) {
                 Console.WriteLine(e);
             }

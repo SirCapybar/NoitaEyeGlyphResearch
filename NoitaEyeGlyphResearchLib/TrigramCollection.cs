@@ -70,7 +70,7 @@ namespace NoitaEyeGlyphResearchLib {
             }
             return new TrigramCollection(result);
         }
-        public float[] GetICs(uint maxKeySize) {
+        public float[] GetIcs(uint maxKeySize) {
             float[] result = new float[maxKeySize];
             for (uint i = 1; i <= maxKeySize; ++i) {
                 TrigramCollection[] columns = new TrigramCollection[i];
