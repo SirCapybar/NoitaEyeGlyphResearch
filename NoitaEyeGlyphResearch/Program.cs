@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,9 +16,10 @@ namespace NoitaEyeGlyphResearch {
                 for (int i = 1; i < lines.Length; ++i) {
                     tlc.TrigramLines[i - 1] = lines[i].ExtractTrigrams();
                 }
+
                 //TrigramSet modified = baseTrigramSet.Reorder(ReorderParam.None, ReorderParam.SwapAC);
                 //Console.WriteLine(data.GetFrequencyMessage());
-                const int CHAR_BOT_INCL = 32, CHAR_TOP_EXCL = 127, UTF8_TOP_INCL = 255;
+
                 StringBuilder avgIcsBuilder = new StringBuilder(), perMessageIcsBuilder = new StringBuilder();
                 foreach (ReorderParam oddParam in new[] {
                     ReorderParam.ABC,
@@ -62,6 +64,82 @@ namespace NoitaEyeGlyphResearch {
 
                 File.WriteAllText("ics.csv", avgIcsBuilder.ToString());
                 File.WriteAllText("msg_ics.csv", perMessageIcsBuilder.ToString());
+
+                const int MIN_ASCII_INCL = 32, MAX_ASCII_EXCL = 127;
+
+                //StringBuilder keyOutputBuilder = new StringBuilder();
+                //string[] keys = { "asabovesobelow", "ASABOVESOBELOW", "AsAboveSoBelow" };
+                //Dictionary<Trigram, uint> data = tlc.GetFrequencyData();
+                //Dictionary<Trigram, int> alphabet = new Dictionary<Trigram, int>();
+                //Trigram[] dataTrigrams = data.Keys.ToArray();
+                //for (int i = 0; i < dataTrigrams.Length; ++i) {
+                //    alphabet[dataTrigrams[i]] = i;
+                //}
+                //Encoding encoding = Encoding.ASCII;
+                //foreach (ReorderParam oddParam in new[] {
+                //    ReorderParam.ABC,
+                //    ReorderParam.BAC,
+                //    ReorderParam.CBA,
+                //    ReorderParam.ACB,
+                //    ReorderParam.BCA,
+                //    ReorderParam.CAB
+                //}) {
+                //    foreach (ReorderParam evenParam in new[] {
+                //        ReorderParam.ABC,
+                //        ReorderParam.BAC,
+                //        ReorderParam.CBA,
+                //        ReorderParam.ACB,
+                //        ReorderParam.BCA,
+                //        ReorderParam.CAB
+                //    }) {
+                //        keyOutputBuilder.AppendLine($">>>>> {oddParam}, {evenParam}");
+                //        TrigramLineCollection tlcc = tlc.Reorder(oddParam, evenParam);
+                //        foreach (string key in keys) {
+                //            for (int offset = 0; offset < 125; ++offset) {
+                //                TrigramCollection tck = encoding.GetBytes(key).ToTrigrams(offset).Reorder(oddParam, evenParam);
+                //                if (tck.Trigrams.Any(t => !data.ContainsKey(t))) {
+                //                    continue;
+                //                }
+
+                //                keyOutputBuilder.AppendLine($"FOR KEY {key} AND OFFSET {offset}:");
+                //                foreach (TrigramCollection line in tlcc.TrigramLines.Take(1)) {
+                //                    TrigramCollection decoded = line.Cypher(tck, alphabet, true);
+                //                    string result = encoding.GetString(decoded.ToByteArray(-offset));
+                //                    keyOutputBuilder.AppendLine($"{decoded.GetIc()} > {result}");
+                //                    //result = encoding.GetString(decoded.ToByteArray(offset));
+                //                    //keyOutputBuilder.AppendLine($"{decoded.GetIc()} > {result}");
+                //                    //result = encoding.GetString(decoded.ToByteArray(0));
+                //                    //keyOutputBuilder.AppendLine($"{decoded.GetIc()} > {result}");
+                //                    //result = encoding.GetString(decoded.ToByteArray(32));
+                //                    //keyOutputBuilder.AppendLine($"{decoded.GetIc()} > {result}");
+                //                }
+                //            }
+
+                //            //foreach (TrigramCollection line in tlc.TrigramLines) {
+                //            //    byte[] lineBytes = line.ToByteArray();
+                //            //    byte[] decoded = lineBytes.Cypher(keyBytes, true);
+
+                //            //}
+                //            //int min = key.OrderBy(c => c).First();
+                //            //int minOffset = -min, maxOffset = minOffset + 124;
+                //            //for (int i = minOffset; i < maxOffset; ++i) {
+                //            //    TrigramCollection tck = key.ToTrigrams(i);
+                //            //    foreach (TrigramCollection line in tlc.TrigramLines.Take(1)) {
+                //            //        string r1 = line.Cypher(tck, true).ToString();
+                //            //        string r2 = line.Cypher(tck, false).ToString();
+                //            //        keyOutputBuilder.AppendLine(
+                //            //            r1.Any(c => c < MIN_ASCII_INCL || c >= MAX_ASCII_EXCL) ? r1 : "Invalid R1");
+                //            //        keyOutputBuilder.AppendLine(
+                //            //            r2.Any(c => c < MIN_ASCII_INCL || c >= MAX_ASCII_EXCL) ? r2 : "Invalid R2");
+                //            //    }
+                //            //    keyOutputBuilder.AppendLine("---");
+                //            //}
+                //            keyOutputBuilder.AppendLine("--------------");
+                //        }
+                //    }
+                //}
+
+                //File.WriteAllText("key_output.txt", keyOutputBuilder.ToString());
             } catch (Exception e) {
                 Console.WriteLine(e);
             }

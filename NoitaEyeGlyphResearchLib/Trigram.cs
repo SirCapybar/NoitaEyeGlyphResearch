@@ -169,6 +169,10 @@ namespace NoitaEyeGlyphResearchLib {
             return $"{A}{B}{C}";
         }
 
+        public char ToChar(int offset) {
+            return (char)(GetBase10() + offset);
+        }
+
         public int CompareTo(Trigram other) {
             int aComparison = A.CompareTo(other.A);
             if (aComparison != 0) {

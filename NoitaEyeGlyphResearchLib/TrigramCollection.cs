@@ -105,5 +105,34 @@ namespace NoitaEyeGlyphResearchLib {
             }
             return result;
         }
+
+        public TrigramCollection Cypher(TrigramCollection key, Dictionary<Trigram, int> alphabet, bool decode) {
+            TrigramCollection result = new TrigramCollection(new Trigram[Trigrams.Length]);
+            int keyIndex = 0;
+            for (int i = 0; i < result.Trigrams.Length; ++i) {
+                if (decode) {
+                    result.Trigrams[i] = Trigrams[i] - alphabet[key.Trigrams[keyIndex]];
+                } else { // encode
+                    result.Trigrams[i] = Trigrams[i] + alphabet[key.Trigrams[keyIndex]];
+                }
+
+                if (++keyIndex == key.Trigrams.Length) {
+                    keyIndex = 0;
+                }
+            }
+            return result;
+        }
+
+        public string ToString(int offset) {
+            return new string(Trigrams.Select(t => t.ToChar(offset)).ToArray());
+        }
+
+        public override string ToString() {
+            return ToString(0);
+        }
+
+        public byte[] ToByteArray(int offset) {
+            return Trigrams.Select(t => (byte)((t.GetBase10() + offset) % 256)).ToArray();
+        }
     }
 }
