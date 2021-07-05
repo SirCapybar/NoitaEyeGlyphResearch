@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks.Dataflow;
 
 using NoitaEyeGlyphResearchLib;
 
@@ -15,57 +17,66 @@ namespace NoitaEyeGlyphResearch {
                 for (int i = 1; i < lines.Length; ++i) {
                     tlc.TrigramLines[i - 1] = lines[i].ExtractTrigrams();
                 }
+                const int KEY_COUNT = 35;
 
                 //TrigramSet modified = baseTrigramSet.Reorder(ReorderParam.None, ReorderParam.SwapAC);
                 //Console.WriteLine(data.GetFrequencyMessage());
 
-                StringBuilder avgIcsBuilder = new StringBuilder(), perMessageIcsBuilder = new StringBuilder();
-                foreach (ReorderParam oddParam in new[] {
-                    ReorderParam.ABC,
-                    ReorderParam.BAC,
-                    ReorderParam.CBA,
-                    ReorderParam.ACB,
-                    ReorderParam.BCA,
-                    ReorderParam.CAB
-                }) {
-                    foreach (ReorderParam evenParam in new[] {
-                        ReorderParam.ABC,
-                        ReorderParam.BAC,
-                        ReorderParam.CBA,
-                        ReorderParam.ACB,
-                        ReorderParam.BCA,
-                        ReorderParam.CAB
-                    }) {
-                        const int KEY_COUNT = 35;
-                        TrigramLineCollection subTlc = tlc.Reorder(oddParam, evenParam);
-                        Console.WriteLine($"{oddParam}, {evenParam}");
-                        Console.WriteLine(subTlc.GetIc());
-                        Console.WriteLine();
-                        float[][] keyLengthBasedIcs = new float[subTlc.TrigramLines.Length][];
-                        for (int i = 0; i < keyLengthBasedIcs.Length; ++i) {
-                            keyLengthBasedIcs[i] = subTlc.TrigramLines[i].GetIcs(KEY_COUNT);
-                        }
-                        float[] avg = new float[KEY_COUNT];
-                        for (int i = 0; i < KEY_COUNT; ++i) {
-                            float sum = 0.0f;
-                            foreach (float[] ics in keyLengthBasedIcs) {
-                                sum += ics[i];
-                            }
-                            avg[i] = sum / keyLengthBasedIcs.Length;
-                        }
-                        avgIcsBuilder.AppendLine($"{oddParam},{evenParam}," +
-                                           $"{string.Join(",", avg.Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
-                        for (int i = 0; i < keyLengthBasedIcs.Length; ++i) {
-                            perMessageIcsBuilder.AppendLine($"Msg{i + 1},{oddParam},{evenParam},{string.Join(",", keyLengthBasedIcs[i].Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
-                        }
-                    }
-                }
 
-                File.WriteAllText("ics.csv", avgIcsBuilder.ToString());
-                File.WriteAllText("msg_ics.csv", perMessageIcsBuilder.ToString());
+
+
+                //StringBuilder avgIcsBuilder = new StringBuilder(), perMessageIcsBuilder = new StringBuilder();
+                //foreach (ReorderParam oddParam in new[] {
+                //    ReorderParam.ABC,
+                //    ReorderParam.BAC,
+                //    ReorderParam.CBA,
+                //    ReorderParam.ACB,
+                //    ReorderParam.BCA,
+                //    ReorderParam.CAB
+                //}) {
+                //    foreach (ReorderParam evenParam in new[] {
+                //        ReorderParam.ABC,
+                //        ReorderParam.BAC,
+                //        ReorderParam.CBA,
+                //        ReorderParam.ACB,
+                //        ReorderParam.BCA,
+                //        ReorderParam.CAB
+                //    }) {
+                //        TrigramLineCollection subTlc = tlc.Reorder(oddParam, evenParam);
+                //        Console.WriteLine($"{oddParam}, {evenParam}");
+                //        Console.WriteLine(subTlc.GetIc());
+                //        Console.WriteLine();
+                //        float[][] keyLengthBasedIcs = new float[subTlc.TrigramLines.Length][];
+                //        for (int i = 0; i < keyLengthBasedIcs.Length; ++i) {
+                //            keyLengthBasedIcs[i] = subTlc.TrigramLines[i].GetIcs(KEY_COUNT);
+                //        }
+                //        float[] avg = new float[KEY_COUNT];
+                //        for (int i = 0; i < KEY_COUNT; ++i) {
+                //            float sum = 0.0f;
+                //            foreach (float[] ics in keyLengthBasedIcs) {
+                //                sum += ics[i];
+                //            }
+                //            avg[i] = sum / keyLengthBasedIcs.Length;
+                //        }
+                //        avgIcsBuilder.AppendLine($"{oddParam},{evenParam}," +
+                //                           $"{string.Join(",", avg.Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+                //        for (int i = 0; i < keyLengthBasedIcs.Length; ++i) {
+                //            perMessageIcsBuilder.AppendLine($"Msg{i + 1},{oddParam},{evenParam},{string.Join(",", keyLengthBasedIcs[i].Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+                //        }
+                //    }
+                //}
+
+                //File.WriteAllText("ics.csv", avgIcsBuilder.ToString());
+                //File.WriteAllText("msg_ics.csv", perMessageIcsBuilder.ToString());
+
+
+
 
                 const int MIN_ASCII_INCL = 32, MAX_ASCII_EXCL = 127;
                 Encoding encoding = Encoding.BigEndianUnicode;
+
+
+
 
                 //StringBuilder keyOutputBuilder = new StringBuilder();
                 //string[] keys = { "asabovesobelow", "ASABOVESOBELOW", "AsAboveSoBelow" };
@@ -141,6 +152,8 @@ namespace NoitaEyeGlyphResearch {
 
 
 
+
+
                 //StringBuilder binaryReworkBuilder = new StringBuilder();
                 //foreach (ReorderParam oddParam in new[] {
                 //    ReorderParam.ABC,
@@ -201,6 +214,61 @@ namespace NoitaEyeGlyphResearch {
                 //float iiii = msg.GetIc();
                 //iiii = msg.GetIc(alphabet1);
                 //iiii = msg.GetIc(alphabet2);
+
+
+
+
+                const string diamondAlphabet = "abcdefghijklmnopqrstuvwxy";
+                StringBuilder diamondAvgIcsBuilder = new StringBuilder();
+                StringBuilder diamondPerMessageIcsBuilder = new StringBuilder();
+                foreach (ReorderParam oddParam in new[] {
+                    ReorderParam.ABC,
+                    //ReorderParam.BAC,
+                    //ReorderParam.CBA,
+                    //ReorderParam.ACB,
+                    //ReorderParam.BCA,
+                    //ReorderParam.CAB
+                }) {
+                    foreach (ReorderParam evenParam in new[] {
+                        ReorderParam.ABC,
+                        //ReorderParam.BAC,
+                        //ReorderParam.CBA,
+                        //ReorderParam.ACB,
+                        //ReorderParam.BCA,
+                        //ReorderParam.CAB
+                    }) {
+                        TrigramLineCollection tlcc = tlc.Reorder(oddParam, evenParam);
+                        List<float[]> lineIcs = new List<float[]>();
+                        foreach (TrigramCollection line in tlcc.TrigramLines.Take(1)) {
+                            byte[] diamondData = line.GetDiamondCypherValues();
+                            string diamondString = new string(diamondData.Select(b => diamondAlphabet[b - 1]).ToArray());
+                            //Console.WriteLine(string.Join(',', diamondData));
+                            Console.WriteLine(diamondString);
+                            Console.WriteLine(diamondString.GetIc(diamondAlphabet));
+                            lineIcs.Add(diamondString.GetIcs(KEY_COUNT, diamondAlphabet));
+                            diamondPerMessageIcsBuilder.AppendLine(
+                                $"Msg,{oddParam},{evenParam},{string.Join(',', lineIcs.Last().Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+                            //for (int i = 1; i < 25; ++i) {
+                            //    diamondString = new string(diamondData.Select(b => diamondAlphabet[(b - 1 + i) % 25]).ToArray());
+                            //    Console.WriteLine(diamondString);
+                            //}
+                        }
+
+                        float[] avg = new float[KEY_COUNT];
+                        for (int i = 0; i < avg.Length; ++i) {
+                            foreach (float[] ics in lineIcs) {
+                                avg[i] += ics[i];
+                            }
+                            avg[i] /= avg.Length;
+                        }
+
+                        diamondAvgIcsBuilder.AppendLine(
+                            $"{oddParam},{evenParam},{string.Join(',', avg.Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+                    }
+                }
+
+                File.WriteAllText("dia_ics.csv", diamondAvgIcsBuilder.ToString());
+                File.WriteAllText("dia_msg_ics.csv", diamondPerMessageIcsBuilder.ToString());
             } catch (Exception e) {
                 Console.WriteLine(e);
             }

@@ -161,5 +161,9 @@ namespace NoitaEyeGlyphResearchLib {
             }
             return builder.ToString();
         }
+
+        public byte[] GetDiamondCypherValues() {
+            return Trigrams.Select(t => t.GetDiamondCypherValue()).ToArray();
+        }
     }
 }

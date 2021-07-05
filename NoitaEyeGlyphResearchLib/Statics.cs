@@ -4,7 +4,17 @@ using System.Linq;
 using System.Text;
 
 namespace NoitaEyeGlyphResearchLib {
-    public static class Extensions {
+    public static class Statics {
+        public static int[][] DiamondMatrix { get; } = new int[7][] {
+            new[] {  0, 0, 0, 1, 0, 0, 0 },
+            new[] {  0, 0, 2, 3, 4, 0, 0 },
+            new[] {  0, 5, 6, 7, 8, 9, 0 },
+            new[] { 10,11,12,13,14,15,16 },
+            new[] {  0,17,18,19,20,21, 0 },
+            new[] {  0, 0,22,23,24, 0, 0 },
+            new[] {  0, 0, 0,25, 0, 0, 0 }
+        };
+
         public static TrigramCollection ExtractTrigrams(this string csvLine) {
             /*
              *  1 2 / 6 \ 7 8 . . .

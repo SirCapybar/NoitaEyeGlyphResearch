@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
@@ -249,5 +250,31 @@ namespace NoitaEyeGlyphResearchLib {
             }
             return builder.ToString();
         }
+
+        public byte GetDiamondCypherValue() {
+            int x = 3, y = x;
+            Tuple<int, int> off = DiamondCypherOffsets[A];
+            x += off.Item1;
+            y += off.Item2;
+            off = DiamondCypherOffsets[B];
+            x += off.Item1;
+            y += off.Item2;
+            off = DiamondCypherOffsets[C];
+            x += off.Item1;
+            y += off.Item2;
+            int value = Statics.DiamondMatrix[x][y];
+            if (value == 0) {
+                throw new ArgumentOutOfRangeException();
+            }
+            return (byte)value;
+        }
+
+        private Dictionary<byte, Tuple<int, int>> DiamondCypherOffsets { get; } = new Dictionary<byte, Tuple<int, int>> {
+            { 0, new Tuple<int, int>(0, 0) },
+            { 1, new Tuple<int, int>(0, -1) },
+            { 2, new Tuple<int, int>(1, 0) },
+            { 3, new Tuple<int, int>(0, 1) },
+            { 4, new Tuple<int, int>(-1, 0) }
+        };
     }
 }
