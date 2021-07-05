@@ -218,7 +218,43 @@ namespace NoitaEyeGlyphResearch {
 
 
 
-                const string diamondAlphabet = "abcdefghijklmnopqrstuvwxy";
+                // Every second eye inversion
+                //foreach (TrigramCollection line in tlc.TrigramLines) {
+                //    bool odd = true;
+                //    for (int i = 0; i < line.Trigrams.Length; ++i) {
+                //        if (odd) {
+                //            line.Trigrams[i].InvertB();
+                //        } else {
+                //            line.Trigrams[i].InvertAC();
+                //        }
+                //        if (i % 2 == 1) {
+                //            odd = !odd;
+                //        }
+                //    }
+                //}
+
+                // Every second trigram inversion
+                foreach (TrigramCollection line in tlc.TrigramLines) {
+                    bool even = true;
+                    foreach (Trigram t in line.Trigrams) {
+                        if (even) {
+                            t.Invert();
+                        }
+                        even = !even;
+                    }
+                }
+
+
+
+
+                const string initAlph = "abcdefghijklmnopqrstuvwxyz";
+                string[] alphabets = new string[26];
+                for (int i = 0; i < alphabets.Length; ++i) {
+                    List<char> l = initAlph.ToList();
+                    l.RemoveAt(i);
+                    alphabets[i] = new string(l.ToArray());
+                }
+
                 StringBuilder diamondAvgIcsBuilder = new StringBuilder();
                 StringBuilder diamondPerMessageIcsBuilder = new StringBuilder();
                 foreach (ReorderParam oddParam in new[] {
@@ -238,37 +274,40 @@ namespace NoitaEyeGlyphResearch {
                         //ReorderParam.CAB
                     }) {
                         TrigramLineCollection tlcc = tlc.Reorder(oddParam, evenParam);
-                        List<float[]> lineIcs = new List<float[]>();
+                        //List<float[]> lineIcs = new List<float[]>();
                         foreach (TrigramCollection line in tlcc.TrigramLines.Take(1)) {
-                            byte[] diamondData = line.GetDiamondCypherValues();
-                            string diamondString = new string(diamondData.Select(b => diamondAlphabet[b - 1]).ToArray());
-                            //Console.WriteLine(string.Join(',', diamondData));
-                            Console.WriteLine(diamondString);
-                            Console.WriteLine(diamondString.GetIc(diamondAlphabet));
-                            lineIcs.Add(diamondString.GetIcs(KEY_COUNT, diamondAlphabet));
-                            diamondPerMessageIcsBuilder.AppendLine(
-                                $"Msg,{oddParam},{evenParam},{string.Join(',', lineIcs.Last().Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
-                            //for (int i = 1; i < 25; ++i) {
-                            //    diamondString = new string(diamondData.Select(b => diamondAlphabet[(b - 1 + i) % 25]).ToArray());
-                            //    Console.WriteLine(diamondString);
-                            //}
-                        }
+                            byte[] diamondData = line.GetDiamondCypherValues(false, true);
+                            foreach (string alphabet in alphabets) {
+                                string diamondString = new string(diamondData.Select(b => alphabet[b - 1]).ToArray());
+                                //Console.WriteLine(string.Join(',', diamondData));
+                                Console.WriteLine(diamondString);
+                                //Console.WriteLine(diamondString.GetIc(alphabet));
 
-                        float[] avg = new float[KEY_COUNT];
-                        for (int i = 0; i < avg.Length; ++i) {
-                            foreach (float[] ics in lineIcs) {
-                                avg[i] += ics[i];
+                                //lineIcs.Add(diamondString.GetIcs(KEY_COUNT, diamondAlphabet));
+                                //diamondPerMessageIcsBuilder.AppendLine(
+                                //    $"Msg,{oddParam},{evenParam},{string.Join(',', lineIcs.Last().Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+
+                                //for (int i = 1; i < alphabet.Length; ++i) {
+                                //    diamondString = new string(diamondData.Select(b => alphabet[(b - 1 + i) % alphabet.Length]).ToArray());
+                                //    Console.WriteLine(diamondString);
+                                //}
                             }
-                            avg[i] /= avg.Length;
                         }
 
-                        diamondAvgIcsBuilder.AppendLine(
-                            $"{oddParam},{evenParam},{string.Join(',', avg.Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
+                        //float[] avg = new float[KEY_COUNT];
+                        //for (int i = 0; i < avg.Length; ++i) {
+                        //    foreach (float[] ics in lineIcs) {
+                        //        avg[i] += ics[i];
+                        //    }
+                        //    avg[i] /= avg.Length;
+                        //}
+                        //diamondAvgIcsBuilder.AppendLine(
+                        //    $"{oddParam},{evenParam},{string.Join(',', avg.Select(f => f.ToString(CultureInfo.InvariantCulture)))}");
                     }
                 }
 
-                File.WriteAllText("dia_ics.csv", diamondAvgIcsBuilder.ToString());
-                File.WriteAllText("dia_msg_ics.csv", diamondPerMessageIcsBuilder.ToString());
+                //File.WriteAllText("dia_ics.csv", diamondAvgIcsBuilder.ToString());
+                //File.WriteAllText("dia_msg_ics.csv", diamondPerMessageIcsBuilder.ToString());
             } catch (Exception e) {
                 Console.WriteLine(e);
             }

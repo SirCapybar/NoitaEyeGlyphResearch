@@ -163,7 +163,19 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public byte[] GetDiamondCypherValues() {
-            return Trigrams.Select(t => t.GetDiamondCypherValue()).ToArray();
+            return Trigrams.Select(t => t.GetDiamondCypherValue(false)).ToArray();
+        }
+
+        public byte[] GetDiamondCypherValues(bool reverseOdd, bool reverseEven) {
+            byte[] result = new byte[Trigrams.Length];
+            for (int i = 0; i < result.Length; ++i) {
+                if (i % 2 == 0) {
+                    result[i] = Trigrams[i].GetDiamondCypherValue(reverseOdd);
+                } else {
+                    result[i] = Trigrams[i].GetDiamondCypherValue(reverseEven);
+                }
+            }
+            return result;
         }
     }
 }

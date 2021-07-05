@@ -251,17 +251,53 @@ namespace NoitaEyeGlyphResearchLib {
             return builder.ToString();
         }
 
-        public byte GetDiamondCypherValue() {
+        public void InvertA() {
+            A = EyeInversions[A];
+        }
+
+        public void InvertB() {
+            B = EyeInversions[B];
+        }
+
+        public void InvertC() {
+            C = EyeInversions[C];
+        }
+
+        public void Invert() {
+            A = EyeInversions[A];
+            B = EyeInversions[B];
+            C = EyeInversions[C];
+        }
+
+        public void InvertAC() {
+            A = EyeInversions[A];
+            C = EyeInversions[C];
+        }
+
+        public byte GetDiamondCypherValue(bool reverse) {
             int x = 3, y = x;
-            Tuple<int, int> off = DiamondCypherOffsets[A];
-            x += off.Item1;
-            y += off.Item2;
-            off = DiamondCypherOffsets[B];
-            x += off.Item1;
-            y += off.Item2;
-            off = DiamondCypherOffsets[C];
-            x += off.Item1;
-            y += off.Item2;
+            if (!reverse) {
+                Tuple<int, int> off = DiamondCypherOffsets[A];
+                x += off.Item1;
+                y += off.Item2;
+                off = DiamondCypherOffsets[B];
+                x += off.Item1;
+                y += off.Item2;
+                off = DiamondCypherOffsets[C];
+                x += off.Item1;
+                y += off.Item2;
+            } else {
+                Tuple<int, int> off = DiamondCypherOffsets[A];
+                x -= off.Item1;
+                y -= off.Item2;
+                off = DiamondCypherOffsets[B];
+                x -= off.Item1;
+                y -= off.Item2;
+                off = DiamondCypherOffsets[C];
+                x -= off.Item1;
+                y -= off.Item2;
+            }
+
             int value = Statics.DiamondMatrix[x][y];
             if (value == 0) {
                 throw new ArgumentOutOfRangeException();
@@ -275,6 +311,14 @@ namespace NoitaEyeGlyphResearchLib {
             { 2, new Tuple<int, int>(1, 0) },
             { 3, new Tuple<int, int>(0, 1) },
             { 4, new Tuple<int, int>(-1, 0) }
+        };
+
+        private Dictionary<byte, byte> EyeInversions { get; } = new Dictionary<byte, byte> {
+            { 0, 0 },
+            { 1, 3 },
+            { 3, 1 },
+            { 2, 4 },
+            { 4, 2 }
         };
     }
 }
