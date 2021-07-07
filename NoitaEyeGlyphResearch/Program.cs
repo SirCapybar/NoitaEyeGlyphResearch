@@ -17,7 +17,49 @@ namespace NoitaEyeGlyphResearch {
                 for (int i = 1; i < lines.Length; ++i) {
                     tlc.TrigramLines[i - 1] = lines[i].ExtractTrigrams();
                 }
+
                 const int KEY_COUNT = 35;
+
+                const string alph25 = "abcdefghiklmnopqrstuvwxyz";
+                foreach (ReorderParam oddParam in new[] {
+                    ReorderParam.ABC,
+                    //ReorderParam.BAC,
+                    //ReorderParam.CBA,
+                    //ReorderParam.ACB,
+                    //ReorderParam.BCA,
+                    //ReorderParam.CAB
+                }) {
+                    foreach (ReorderParam evenParam in new[] {
+                        ReorderParam.ABC,
+                        //ReorderParam.BAC,
+                        //ReorderParam.CBA,
+                        //ReorderParam.ACB,
+                        //ReorderParam.BCA,
+                        //ReorderParam.CAB
+                    }) {
+                        foreach (TrigramCollection line in tlc.Reorder(oddParam, evenParam).TrigramLines.Take(1)) {
+                            //Console.WriteLine(string.Join(',', line.GetPolybiusValues()));
+                            for (int j = 0; j < 1; ++j) {
+                                int[] polybius = line.GetPolybiusValues();
+                                StringBuilder msgBuilder = new StringBuilder();
+                                for (int i = 0; i < polybius.Length; ++i) {
+                                    //if (i % 2 == 0) {
+                                        msgBuilder.Append(alph25[(polybius[i] + j) % 25]);
+                                    //} else {
+                                        //msgBuilder.Append(alph25[24 - (polybius[i] + j) % 25]);
+                                    //}
+                                }
+
+                                string msg = msgBuilder.ToString();
+                                //string msg = new string(polybius.Select(i => alph25[24 - (i + j) % 25]).ToArray());
+                                Console.WriteLine(msg);
+                                Dictionary<char, uint> data = msg.GetFrequencyData(alph25);
+                                Console.WriteLine($"Overall IC: {msg.GetIc(alph25)}");
+                                //Console.WriteLine(string.Join('\n', msg.GetIcs(40U, alph25)));
+                            }
+                        }
+                    }
+                }
 
                 //TrigramSet modified = baseTrigramSet.Reorder(ReorderParam.None, ReorderParam.SwapAC);
                 //Console.WriteLine(data.GetFrequencyMessage());
@@ -280,7 +322,7 @@ namespace NoitaEyeGlyphResearch {
                             foreach (string alphabet in alphabets) {
                                 string diamondString = new string(diamondData.Select(b => alphabet[b - 1]).ToArray());
                                 //Console.WriteLine(string.Join(',', diamondData));
-                                Console.WriteLine(diamondString);
+                                //Console.WriteLine(diamondString);
                                 //Console.WriteLine(diamondString.GetIc(alphabet));
 
                                 //lineIcs.Add(diamondString.GetIcs(KEY_COUNT, diamondAlphabet));

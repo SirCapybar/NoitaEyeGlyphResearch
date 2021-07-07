@@ -15,6 +15,31 @@ namespace NoitaEyeGlyphResearchLib {
             new[] {  0, 0, 0,25, 0, 0, 0 }
         };
 
+        public static int[][][] PolybiusCube { get; } = new int[5][][];
+
+        static Statics() {
+            for (int i = 0; i < 5; ++i) {
+                PolybiusCube[i] = new int[5][];
+                for (int j = 0; j < 5; ++j) {
+                    PolybiusCube[i][j] = new int[5];
+                }
+            }
+
+            for (int i = 0; i < 5; ++i) {
+                for (int j = 0; j < 5; ++j) {
+                    PolybiusCube[0][i][j] = i * 5 + j;
+                }
+            }
+
+            for (int i = 1; i < 5; ++i) {
+                for (int j = 0; j < 5; ++j) {
+                    for (int k = 0; k < 5; ++k) {
+                        PolybiusCube[i][j][k] = PolybiusCube[0][(j + i) % 5][k];
+                    }
+                }
+            }
+        }
+
         public static TrigramCollection ExtractTrigrams(this string csvLine) {
             /*
              *  1 2 / 6 \ 7 8 . . .

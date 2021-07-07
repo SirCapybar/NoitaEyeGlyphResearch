@@ -274,6 +274,10 @@ namespace NoitaEyeGlyphResearchLib {
             C = EyeInversions[C];
         }
 
+        public int GetPolybiusValue() {
+            return Statics.PolybiusCube[A][B][C];
+        }
+
         public byte GetDiamondCypherValue(bool reverse) {
             int x = 3, y = x;
             if (!reverse) {
