@@ -40,23 +40,6 @@ namespace NoitaEyeGlyphResearchLib {
             }
         }
 
-        public static TrigramCollection ExtractTrigrams(this string csvLine) {
-            /*
-             *  1 2 / 6 \ 7 8 . . .
-             *   3 / 5 4 \ 9 . . .
-             */
-            Queue<byte> values = new Queue<byte>(csvLine.Split(',')
-                .Skip(2)
-                .Where(s => !string.IsNullOrWhiteSpace(s))
-                .Select(byte.Parse));
-            List<Trigram> trigrams = new List<Trigram>();
-            while (values.Any()) {
-                trigrams.Add(new Trigram(values.Dequeue(), values.Dequeue(), values.Dequeue()));
-            }
-
-            return new TrigramCollection(trigrams.ToArray());
-        }
-
         public static char[] ToChars(this int[] base10, int offset = 0) {
             char[] result = new char[base10.Length];
             for (int i = 0; i < result.Length; ++i) {

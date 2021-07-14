@@ -9,10 +9,4 @@
     <ProjectReference Include="..\NoitaEyeGlyphResearchLib\NoitaEyeGlyphResearchLib.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="data.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
