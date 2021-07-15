@@ -1,14 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace NoitaEyeGlyphResearchLib {
-    public class TrigramCollection {
+    public class TrigramCollection : IEnumerable {
         public TrigramCollection(Trigram[] trigrams) {
             Trigrams = trigrams;
         }
 
         public Trigram[] Trigrams { get; }
+
+        public int Length {
+            get { return Trigrams.Length; }
+        }
+
+        public Trigram this[int index] {
+            get { return Trigrams[index]; }
+            set { Trigrams[index] = value; }
+        }
 
         public float GetIc() {
             Dictionary<Trigram, uint> data = GetFrequencyData();
@@ -16,7 +26,7 @@ namespace NoitaEyeGlyphResearchLib {
             foreach (KeyValuePair<Trigram, uint> pair in data) {
                 sum += pair.Value * (pair.Value - 1U);
             }
-            return sum / (Trigrams.Length * (Trigrams.Length - 1));
+            return sum / (Length * (Length - 1));
         }
 
         public Dictionary<Trigram, uint> GetFrequencyData() {
@@ -41,14 +51,14 @@ namespace NoitaEyeGlyphResearchLib {
 
         public TrigramCollection GetHalf(bool odd) {
             List<Trigram> result = new List<Trigram>();
-            for (int i = odd ? 0 : 1; i < Trigrams.Length; i += 2) {
+            for (int i = odd ? 0 : 1; i < Length; i += 2) {
                 result.Add(Trigrams[i]);
             }
             return new TrigramCollection(result.ToArray());
         }
 
         public int[] GetBase10Array() {
-            int[] result = new int[Trigrams.Length];
+            int[] result = new int[Length];
             for (int i = 0; i < result.Length; ++i) {
                 result[i] = Trigrams[i].GetBase10();
             }
@@ -56,7 +66,7 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public int[] GetBase10Array(byte[] mappings) {
-            int[] result = new int[Trigrams.Length];
+            int[] result = new int[Length];
             for (int i = 0; i < result.Length; ++i) {
                 result[i] = Trigrams[i].GetBase10(mappings);
             }
@@ -64,8 +74,8 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public TrigramCollection Reorder(ReorderParam odd, ReorderParam even) {
-            Trigram[] result = new Trigram[Trigrams.Length];
-            for (int i = 0; i < Trigrams.Length; ++i) {
+            Trigram[] result = new Trigram[Length];
+            for (int i = 0; i < Length; ++i) {
                 result[i] = i % 2 == 0 ? Trigrams[i].Reorder(odd) : Trigrams[i].Reorder(even);
             }
             return new TrigramCollection(result);
@@ -77,7 +87,7 @@ namespace NoitaEyeGlyphResearchLib {
                 for (int j = 0; j < columns.Length; ++j) {
                     List<Trigram> col = new List<Trigram>();
                     int ind = j;
-                    while (ind < Trigrams.Length) {
+                    while (ind < Length) {
                         col.Add(Trigrams[ind]);
                         ind += (int)i;
                     }
@@ -91,16 +101,16 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public TrigramCollection Cypher(TrigramCollection key, bool decode) {
-            TrigramCollection result = new TrigramCollection(new Trigram[Trigrams.Length]);
+            TrigramCollection result = new TrigramCollection(new Trigram[Length]);
             int keyIndex = 0;
-            for (int i = 0; i < result.Trigrams.Length; ++i) {
+            for (int i = 0; i < result.Length; ++i) {
                 if (decode) {
-                    result.Trigrams[i] = Trigrams[i] - key.Trigrams[keyIndex];
+                    result[i] = Trigrams[i] - key[keyIndex];
                 } else { // encode
-                    result.Trigrams[i] = Trigrams[i] + key.Trigrams[keyIndex];
+                    result[i] = Trigrams[i] + key[keyIndex];
                 }
 
-                if (++keyIndex == key.Trigrams.Length) {
+                if (++keyIndex == key.Length) {
                     keyIndex = 0;
                 }
             }
@@ -108,16 +118,16 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public TrigramCollection Cypher(TrigramCollection key, Dictionary<Trigram, int> alphabet, bool decode) {
-            TrigramCollection result = new TrigramCollection(new Trigram[Trigrams.Length]);
+            TrigramCollection result = new TrigramCollection(new Trigram[Length]);
             int keyIndex = 0;
-            for (int i = 0; i < result.Trigrams.Length; ++i) {
+            for (int i = 0; i < result.Length; ++i) {
                 if (decode) {
-                    result.Trigrams[i] = Trigrams[i] - alphabet[key.Trigrams[keyIndex]];
+                    result[i] = Trigrams[i] - alphabet[key[keyIndex]];
                 } else { // encode
-                    result.Trigrams[i] = Trigrams[i] + alphabet[key.Trigrams[keyIndex]];
+                    result[i] = Trigrams[i] + alphabet[key[keyIndex]];
                 }
 
-                if (++keyIndex == key.Trigrams.Length) {
+                if (++keyIndex == key.Length) {
                     keyIndex = 0;
                 }
             }
@@ -130,6 +140,10 @@ namespace NoitaEyeGlyphResearchLib {
 
         public override string ToString() {
             return ToString(0);
+        }
+
+        public IEnumerator GetEnumerator() {
+            return Trigrams.GetEnumerator();
         }
 
         public byte[] ToByteArray(int offset) {
@@ -171,7 +185,7 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public byte[] GetDiamondCypherValues(bool reverseOdd, bool reverseEven) {
-            byte[] result = new byte[Trigrams.Length];
+            byte[] result = new byte[Length];
             for (int i = 0; i < result.Length; ++i) {
                 if (i % 2 == 0) {
                     result[i] = Trigrams[i].GetDiamondCypherValue(reverseOdd);

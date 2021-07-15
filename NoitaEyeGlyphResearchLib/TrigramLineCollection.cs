@@ -1,16 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NoitaEyeGlyphResearchLib {
-    public class TrigramLineCollection {
+    public class TrigramLineCollection : IEnumerable {
         public TrigramLineCollection(TrigramCollection[] trigramLines) {
             TrigramLines = trigramLines;
         }
 
         public TrigramCollection[] TrigramLines { get; }
 
+        public int Length {
+            get { return TrigramLines.Length; }
+        }
+
+        public TrigramCollection this[int index] {
+            get { return TrigramLines[index]; }
+            set { TrigramLines[index] = value; }
+        }
+
         public TrigramLineCollection Reorder(ReorderParam odd, ReorderParam even) {
-            TrigramCollection[] result = new TrigramCollection[TrigramLines.Length];
+            TrigramCollection[] result = new TrigramCollection[Length];
             for (int i = 0; i < result.Length; ++i) {
                 result[i] = TrigramLines[i].Reorder(odd, even);
             }
@@ -26,7 +36,7 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public TrigramLineCollection GetHalf(bool odd) {
-            TrigramCollection[] result = new TrigramCollection[TrigramLines.Length];
+            TrigramCollection[] result = new TrigramCollection[Length];
             for (int i = 0; i < result.Length; ++i) {
                 result[i] = TrigramLines[i].GetHalf(odd);
             }
@@ -52,9 +62,9 @@ namespace NoitaEyeGlyphResearchLib {
         public float GetIc() {
             Dictionary<Trigram, uint>[] data = TrigramLines.Select(t => t.GetFrequencyData()).ToArray();
             float sum = 0.0f;
-            float denom = TrigramLines[0].Trigrams.Length;
-            for (int i = 1; i < TrigramLines.Length; ++i) {
-                denom *= TrigramLines[i].Trigrams.Length;
+            float denom = TrigramLines[0].Length;
+            for (int i = 1; i < Length; ++i) {
+                denom *= TrigramLines[i].Length;
             }
             IEnumerable<Trigram> alphabet =
                 data.Select(p => p.Keys.ToList())
@@ -70,6 +80,10 @@ namespace NoitaEyeGlyphResearchLib {
                 sum += partialSum;
             }
             return sum / denom;
+        }
+
+        public IEnumerator GetEnumerator() {
+            return TrigramLines.GetEnumerator();
         }
     }
 }

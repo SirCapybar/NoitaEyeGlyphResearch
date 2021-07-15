@@ -84,12 +84,12 @@ namespace NoitaEyeGlyphResearchLib {
         private byte[][] GetEncodeByteMatrix(TrigramCollection trigrams) {
             byte[][] matrix = new byte[Layers][];
             for (byte i = 0; i < Layers; ++i) {
-                matrix[i] = new byte[trigrams.Trigrams.Length];
+                matrix[i] = new byte[trigrams.Length];
             }
-            for (int i = 0; i < trigrams.Trigrams.Length; ++i) {
-                matrix[0][i] = trigrams.Trigrams[i].A;
-                matrix[1][i] = trigrams.Trigrams[i].B;
-                matrix[2][i] = trigrams.Trigrams[i].C;
+            for (int i = 0; i < trigrams.Length; ++i) {
+                matrix[0][i] = trigrams[i].A;
+                matrix[1][i] = trigrams[i].B;
+                matrix[2][i] = trigrams[i].C;
             }
             return matrix;
         }
@@ -119,15 +119,15 @@ namespace NoitaEyeGlyphResearchLib {
         private byte[][] GetDecodeByteMatrix(TrigramCollection trigrams, int groupSize) {
             byte[][] matrix = new byte[Layers][];
             for (byte i = 0; i < Layers; ++i) {
-                matrix[i] = new byte[trigrams.Trigrams.Length];
+                matrix[i] = new byte[trigrams.Length];
             }
             Queue<byte> bytes = new Queue<byte>();
-            foreach (Trigram trigram in trigrams.Trigrams) {
+            foreach (Trigram trigram in trigrams) {
                 bytes.Enqueue(trigram.A);
                 bytes.Enqueue(trigram.B);
                 bytes.Enqueue(trigram.C);
             }
-            int groups = trigrams.Trigrams.Length / groupSize;
+            int groups = trigrams.Length / groupSize;
             for (int group = 0; group < groups; ++group) {
                 for (int layer = 0; layer < Layers; ++layer) {
                     for (int i = 0; i < groupSize; ++i) {
@@ -161,12 +161,12 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public string Encode(TrigramCollection trigrams, int groupSize) {
-            if (trigrams.Trigrams.Length % groupSize != 0 || groupSize > trigrams.Trigrams.Length) {
-                throw new ArgumentException($"Message of length {trigrams.Trigrams.Length} is invalid for a group size of {groupSize}!");
+            if (trigrams.Length % groupSize != 0 || groupSize > trigrams.Length) {
+                throw new ArgumentException($"Message of length {trigrams.Length} is invalid for a group size of {groupSize}!");
             }
 
             byte[][] matrix = GetEncodeByteMatrix(trigrams);
-            int groups = trigrams.Trigrams.Length / groupSize;
+            int groups = trigrams.Length / groupSize;
             Queue<byte> encodedBytes = new Queue<byte>();
             for (int group = 0; group < groups; ++group) {
                 for (int layer = 0; layer < Layers; ++layer) {
@@ -176,7 +176,7 @@ namespace NoitaEyeGlyphResearchLib {
                 }
             }
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < trigrams.Trigrams.Length; ++i) {
+            for (int i = 0; i < trigrams.Length; ++i) {
                 builder.Append(TrifidCube[encodedBytes.Dequeue()][encodedBytes.Dequeue()][encodedBytes.Dequeue()]);
             }
             return builder.ToString();
@@ -195,12 +195,12 @@ namespace NoitaEyeGlyphResearchLib {
         }
 
         public string Decode(TrigramCollection trigrams, int groupSize) {
-            if (trigrams.Trigrams.Length % groupSize != 0 || groupSize > trigrams.Trigrams.Length) {
-                throw new ArgumentException($"Message of length {trigrams.Trigrams.Length} is invalid for a group size of {groupSize}!");
+            if (trigrams.Length % groupSize != 0 || groupSize > trigrams.Length) {
+                throw new ArgumentException($"Message of length {trigrams.Length} is invalid for a group size of {groupSize}!");
             }
             byte[][] matrix = GetDecodeByteMatrix(trigrams, groupSize);
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < trigrams.Trigrams.Length; ++i) {
+            for (int i = 0; i < trigrams.Length; ++i) {
                 builder.Append(TrifidCube[matrix[0][i]][matrix[1][i]][matrix[2][i]]);
             }
             return builder.ToString();

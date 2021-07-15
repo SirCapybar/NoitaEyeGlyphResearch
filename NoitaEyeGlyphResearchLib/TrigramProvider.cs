@@ -50,13 +50,13 @@ namespace NoitaEyeGlyphResearchLib {
 
         private void LoadTrigrams() {
             TrigramLineCollection tlc = GetStandardTrigramLineCollection();
-            if (tlc.TrigramLines.Length != MESSAGE_COUNT) {
-                throw new ApplicationException($"Expected {MESSAGE_COUNT} messages, got {tlc.TrigramLines.Length}!");
+            if (tlc.Length != MESSAGE_COUNT) {
+                throw new ApplicationException($"Expected {MESSAGE_COUNT} messages, got {tlc.Length}!");
             }
-            for (int i = 0; i < tlc.TrigramLines.Length; ++i) {
+            for (int i = 0; i < tlc.Length; ++i) {
                 TrigramCollection tc = tlc.TrigramLines[i];
-                int lineCount = tc.Trigrams.Length / TRIGRAMS_PER_LINE;
-                int remainder = tc.Trigrams.Length % TRIGRAMS_PER_LINE;
+                int lineCount = tc.Length / TRIGRAMS_PER_LINE;
+                int remainder = tc.Length % TRIGRAMS_PER_LINE;
                 int index = 0;
                 if (remainder != 0) {
                     ++lineCount;
@@ -69,7 +69,7 @@ namespace NoitaEyeGlyphResearchLib {
                         RawTrigramData[i][j] = new Trigram[TRIGRAMS_PER_LINE];
                     }
                     for (int k = 0; k < RawTrigramData[i][j].Length; ++k) {
-                        RawTrigramData[i][j][k] = tc.Trigrams[index];
+                        RawTrigramData[i][j][k] = tc[index];
                         ++index;
                     }
                 }
