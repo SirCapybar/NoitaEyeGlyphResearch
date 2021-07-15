@@ -217,18 +217,18 @@ namespace NoitaEyeGlyphResearchLib {
                 yield break;
             }
 
-            var list = sequence.ToList();
+            List<T> list = sequence.ToList();
 
             if (!list.Any()) {
                 yield return Enumerable.Empty<T>();
             } else {
-                var startingElementIndex = 0;
+                int startingElementIndex = 0;
 
-                foreach (var startingElement in list) {
-                    var index = startingElementIndex;
-                    var remainingItems = list.Where((e, i) => i != index);
+                foreach (T startingElement in list) {
+                    int index = startingElementIndex;
+                    IEnumerable<T> remainingItems = list.Where((e, i) => i != index);
 
-                    foreach (var permutationOfRemainder in remainingItems.Permute()) {
+                    foreach (IEnumerable<T> permutationOfRemainder in remainingItems.Permute()) {
                         yield return permutationOfRemainder.Prepend(startingElement);
                     }
 
