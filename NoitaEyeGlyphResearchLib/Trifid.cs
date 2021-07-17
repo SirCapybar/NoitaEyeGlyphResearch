@@ -5,7 +5,6 @@ using System.Text;
 
 namespace NoitaEyeGlyphResearchLib {
     public class Trifid {
-
         // So I coded this and then noticed that it's completely irrelevant for the eye puzzle and simply cannot be applied here.
         // It was fun though!
         public Trifid(byte layers, byte gridSize, string alphabet, bool createLayersHorizontally) {

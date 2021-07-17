@@ -170,6 +170,11 @@ namespace NoitaEyeGlyphResearchLib {
             return $"{A}{B}{C}";
         }
 
+        /// <summary>
+        /// Converts this trigram into a <see cref="char"/> by base10 value, including an offset.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public char ToChar(int offset) {
             return (char)(GetBase10() + offset);
         }
@@ -184,14 +189,28 @@ namespace NoitaEyeGlyphResearchLib {
             return bComparison != 0 ? bComparison : C.CompareTo(other.C);
         }
 
+        /// <summary>
+        /// Returns the base10 value of this base5 trigram.
+        /// </summary>
+        /// <returns></returns>
         public int GetBase10() {
             return C + B * 5 + A * 25;
         }
 
+        /// <summary>
+        /// Returns the base10 value of this trigram, but with [0;4] values mapped to the values provided by argument.
+        /// </summary>
+        /// <param name="mappings">The value mappings. This array should contain exactly 5 bytes.</param>
+        /// <returns></returns>
         public int GetBase10(byte[] mappings) {
             return mappings[C] + mappings[B] * 5 + mappings[A] * 25;
         }
 
+        /// <summary>
+        /// Reorders this trigram based on the provided <see cref="ReorderParam"/>.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public Trigram Reorder(ReorderParam param) {
             Trigram result = new Trigram(A, B, C);
             switch (param) {
@@ -214,14 +233,29 @@ namespace NoitaEyeGlyphResearchLib {
             return result;
         }
 
+        /// <summary>
+        /// Returns the sum of the values within this trigram.
+        /// </summary>
+        /// <returns></returns>
         public byte GetSum() {
             return (byte)(A + B + C);
         }
 
+        /// <summary>
+        /// Returns the sum of the values within this trigram, but with [0;4] values mapped to the values provided by argument.
+        /// </summary>
+        /// <param name="mappings">The value mappings. This array should contain exactly 5 bytes.</param>
+        /// <returns></returns>
         public byte GetSum(byte[] mappings) {
             return (byte)(mappings[A] + mappings[B] + mappings[C]);
         }
 
+        /// <summary>
+        /// Converts this trigram to an array of '0' and '1'. Each of the 3 components denotes the amount of the same characters.
+        /// This method was a random idea used with <see cref="Statics.BinaryStringToByteArray"/> and is pretty much stupid. As are many other things.
+        /// </summary>
+        /// <param name="invert"></param>
+        /// <returns></returns>
         public string ToBinaryString(bool invert) {
             StringBuilder builder = new StringBuilder();
             for (byte i = 0; i < A; ++i) {
@@ -236,6 +270,12 @@ namespace NoitaEyeGlyphResearchLib {
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Equivalent to <see cref="ToBinaryString(bool)"/>, but with [0;4] values mapped to the values provided by argument.
+        /// </summary>
+        /// <param name="invert"></param>
+        /// <param name="mappings"></param>
+        /// <returns></returns>
         public string ToBinaryString(bool invert, byte[] mappings) {
             StringBuilder builder = new StringBuilder();
             for (byte i = 0; i < mappings[A]; ++i) {
@@ -250,33 +290,49 @@ namespace NoitaEyeGlyphResearchLib {
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Inverts the eye direction at position A.
+        /// </summary>
         public void InvertA() {
             A = EyeInversions[A];
         }
 
+        /// <summary>
+        /// Inverts the eye direction at position B.
+        /// </summary>
         public void InvertB() {
             B = EyeInversions[B];
         }
 
+        /// <summary>
+        /// Inverts the eye direction at position C.
+        /// </summary>
         public void InvertC() {
             C = EyeInversions[C];
         }
 
+        /// <summary>
+        /// Inverts all eye directions within this trigram.
+        /// </summary>
         public void Invert() {
             A = EyeInversions[A];
             B = EyeInversions[B];
             C = EyeInversions[C];
         }
 
-        public void InvertAC() {
-            A = EyeInversions[A];
-            C = EyeInversions[C];
-        }
-
+        /// <summary>
+        /// Returns the <see cref="Statics.PolybiusCube"/> value corresponding to this trigram.
+        /// </summary>
+        /// <returns></returns>
         public int GetPolybiusValue() {
             return Statics.PolybiusCube[A][B][C];
         }
 
+        /// <summary>
+        /// Returns the <see cref="Statics.DiamondMatrix"/> value corresponding to this trigram.
+        /// </summary>
+        /// <param name="reverse"></param>
+        /// <returns></returns>
         public byte GetDiamondCypherValue(bool reverse) {
             int x = 3, y = x;
             if (!reverse) {
@@ -308,6 +364,9 @@ namespace NoitaEyeGlyphResearchLib {
             return (byte)value;
         }
 
+        /// <summary>
+        /// Specifies the directions the eyes are looking in based on the values.
+        /// </summary>
         private Dictionary<byte, Tuple<int, int>> DiamondCypherOffsets { get; } = new Dictionary<byte, Tuple<int, int>> {
             { 0, new Tuple<int, int>(0, 0) },
             { 1, new Tuple<int, int>(0, -1) },
@@ -316,6 +375,10 @@ namespace NoitaEyeGlyphResearchLib {
             { 4, new Tuple<int, int>(-1, 0) }
         };
 
+        /// <summary>
+        /// Specifies the inversions of each eye direction.
+        /// Centered eye remains unchanged.
+        /// </summary>
         private Dictionary<byte, byte> EyeInversions { get; } = new Dictionary<byte, byte> {
             { 0, 0 },
             { 1, 3 },

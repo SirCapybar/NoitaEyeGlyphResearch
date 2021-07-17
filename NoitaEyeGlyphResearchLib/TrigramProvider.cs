@@ -76,6 +76,11 @@ namespace NoitaEyeGlyphResearchLib {
             }
         }
 
+        /// <summary>
+        /// Returns a <see cref="TrigramLineCollection"/> containing the standard representation of trigram lines.
+        /// Until messing around with weird trigram reading orders, you would usually use this.
+        /// </summary>
+        /// <returns></returns>
         public TrigramLineCollection GetStandard() {
             TrigramCollection[] tcs = new TrigramCollection[MESSAGE_COUNT];
             for (int i = 0; i < tcs.Length; ++i) {
@@ -84,6 +89,10 @@ namespace NoitaEyeGlyphResearchLib {
             return new TrigramLineCollection(tcs);
         }
 
+        /// <summary>
+        /// Returns a <see cref="TrigramLineCollection"/> containing all of the trigram lines reversed.
+        /// </summary>
+        /// <returns></returns>
         public TrigramLineCollection GetReversed() {
             TrigramCollection[] tcs = new TrigramCollection[MESSAGE_COUNT];
             for (int i = 0; i < tcs.Length; ++i) {
@@ -94,6 +103,12 @@ namespace NoitaEyeGlyphResearchLib {
             return new TrigramLineCollection(tcs);
         }
 
+        /// <summary>
+        /// Returns a <see cref="TrigramLineCollection"/>, where all of the trigram lines are read vertically, from left to right.
+        /// </summary>
+        /// <param name="readOddDown">Specifies whether odd vertical lines should be read top to bottom (bottom to top otherwise).</param>
+        /// <param name="readEvenDown">Specifies whether even vertical lines should be read top to bottom (bottom to top otherwise).</param>
+        /// <returns></returns>
         public TrigramLineCollection GetVerticalLeftToRight(bool readOddDown, bool readEvenDown) {
             TrigramCollection[] tcs = new TrigramCollection[MESSAGE_COUNT];
             for (int i = 0; i < tcs.Length; ++i) {
@@ -110,6 +125,12 @@ namespace NoitaEyeGlyphResearchLib {
             return new TrigramLineCollection(tcs);
         }
 
+        /// <summary>
+        /// Returns a <see cref="TrigramLineCollection"/>, where all of the trigram lines are read vertically, from right to left.
+        /// </summary>
+        /// <param name="readOddDown">Specifies whether odd vertical lines should be read top to bottom (bottom to top otherwise).</param>
+        /// <param name="readEvenDown">Specifies whether even vertical lines should be read top to bottom (bottom to top otherwise).</param>
+        /// <returns></returns>
         public TrigramLineCollection GetVerticalRightToLeft(bool readOddDown, bool readEvenDown) {
             TrigramCollection[] tcs = new TrigramCollection[MESSAGE_COUNT];
             for (int i = 0; i < tcs.Length; ++i) {

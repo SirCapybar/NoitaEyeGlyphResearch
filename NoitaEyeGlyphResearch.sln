@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoitaEyeGlyphResearch", "NoitaEyeGlyphResearch\NoitaEyeGlyphResearch.csproj", "{BC62EF2D-F969-4C46-83BC-82C7FE61A95C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoitaEyeGlyphResearch", "NoitaEyeGlyphResearch\NoitaEyeGlyphResearch.csproj", "{BC62EF2D-F969-4C46-83BC-82C7FE61A95C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoitaEyeGlyphResearchLib", "NoitaEyeGlyphResearchLib\NoitaEyeGlyphResearchLib.csproj", "{38CEA3F0-956B-4517-A78E-5B560A8E19A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoitaEyeGlyphResearchLib", "NoitaEyeGlyphResearchLib\NoitaEyeGlyphResearchLib.csproj", "{38CEA3F0-956B-4517-A78E-5B560A8E19A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoitaEyeGlyphResearchTest", "NoitaEyeGlyphResearchTest\NoitaEyeGlyphResearchTest.csproj", "{822A3AAF-BBBA-4687-BD4B-E0C7AEFE2ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoitaEyeGlyphResearchTest", "NoitaEyeGlyphResearchTest\NoitaEyeGlyphResearchTest.csproj", "{822A3AAF-BBBA-4687-BD4B-E0C7AEFE2ADA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F0B8CF4-9F6A-4233-9104-43A4C5EC0905}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
