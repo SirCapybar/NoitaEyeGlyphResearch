@@ -44,4 +44,4 @@ Console.WriteLine(tlc.GetFrequencyData().GetFrequencyMessage());
 
 Although I added documentation wherever appropriate, I am aware that the code might not be easily usable for 'outsiders' as I did not plan to make it public. Hence I am open for suggestions as well as ready to help anyone who struggles with something within my project.
 
-You can always contact me at Noita's discord in the eye room (silma-houne) or directly: **Capybar#6875**.
+You can always contact me at Noita's discord in the eye room (silma-houne) or directly: **sir.capybar**.
